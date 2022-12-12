@@ -1,0 +1,156 @@
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="design.js"></script>
+<div id="housing" class="map_housing" style="border-radius: 40px"></div>
+<div align="center">
+<script type='module'>
+      google.charts.load('current', {'packages':['annotationchart']});
+      google.charts.setOnLoadCallback(drawChart);
+	  
+	  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+	  import { getDatabase, ref, onValue} from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
+	  const firebaseConfig = {
+		apiKey: "AIzaSyD5cL3GT9-v1q5vieAD9GXxhfsSxb4gI6U",
+		authDomain: "meteo-80951.firebaseapp.com",
+		databaseURL: "https://meteo-80951-default-rtdb.europe-west1.firebasedatabase.app",
+		projectId: "meteo-80951",
+		storageBucket: "meteo-80951.appspot.com",
+		messagingSenderId: "432785078592",
+		appId: "1:432785078592:web:f3be0a263f8f0c470222a5",
+		measurementId: "G-R2YTDWS40Z"
+	  };
+  
+	  var b = localStorage.getItem('build');
+	  if (b==null) {
+			localStorage.setItem('build', "build1");
+			b = "build1";
+		}
+	  switch(b) {
+				case "build1":
+				document.getElementById("housing").textContent = "Уфа, Корпуса №1-4, 7-11";
+				break;
+				
+			case "build5":
+				document.getElementById("housing").textContent = "Уфа, Корпуса №5-6";
+				break;
+				
+			case "build12":
+				document.getElementById("housing").textContent = "Уфа, Корпус №12";
+				break;
+					
+			case "build13":
+				document.getElementById("housing").textContent = "Уфа, Корпус №13";
+				break;
+					
+			case "build9":
+				document.getElementById("housing").textContent = "Уфа, Общежитие №9";
+				break;
+					
+			case "buildokt":
+				document.getElementById("housing").textContent = "Октябрьский, Корпуса №1-2";
+				break;
+					
+			case "buildstr":
+				document.getElementById("housing").textContent = "Стерлитамак, Корпус №1";
+				break;
+					
+			case "buildsal":
+				document.getElementById("housing").textContent = "Салават, корпус №1";
+			break;
+		  }
+		  
+		  function getValueWeather(app, db, valueWeather, i) {
+			onValue(ref(db, 'Data/stat/' + b + "/" + valueWeather + i), (snapshot) => {
+			  const data = snapshot.val();
+			  localStorage.setItem('data_stat' + i, data);
+			 // console.log("1 " + data);
+			  });
+			return 
+		}
+		
+      function drawChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('date', 'Date');
+        data.addColumn('number', 'Температура, °C');
+		
+		var masData = [];
+		const app = initializeApp(firebaseConfig);
+		const db = getDatabase();
+  
+		for(let i = 1; i <= 30; i++){
+			getValueWeather(app, db, "temp", i.toString());
+		  }
+		  
+		setTimeout(function() {
+			//Загрузка с firebase
+		}, 1000);
+		
+		let now = new Date();
+		let month = [];
+		
+		for(let i = 1; i <= 30; i++){
+			month.push(new Date(now.getFullYear(), now.getMonth(), now.getDate() - i));
+			var valueWeather = localStorage.getItem('data_stat' + i.toString());
+			console.log("2 " + month);
+			masData.push([month[i-1], Number(valueWeather)]);
+			//console.log(masData);
+		  }
+        data.addRows(masData);
+        var chart = new google.visualization.AnnotationChart(document.getElementById('chart_temp'));
+        var options = {
+          displayAnnotations: true
+        };
+        chart.draw(data, options);
+      }
+</script>
+<div id="chart_temp" class="statStyle"></div>
+<script type='text/javascript'>
+      google.charts.load('current', {'packages':['annotationchart']});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('date', 'Date');
+        data.addColumn('number', 'Давление, мм.рт.ст');
+        data.addRows([
+          [new Date(2022, 12-1, 1), 150],
+          [new Date(2022, 12-1, 2), 160],
+          [new Date(2022, 12-1, 3), 158],
+          [new Date(2022, 12-1, 4), 149],
+          [new Date(2022, 12-1, 5), 148],
+          [new Date(2022, 12-1, 6), 150],
+          [new Date(2022, 12-1, 7), 154]
+        ]);
+        var chart = new google.visualization.AnnotationChart(document.getElementById('chart_pres'));
+        var options = {
+          displayAnnotations: true
+        };
+        chart.draw(data, options);
+      }
+</script>
+<div id="chart_pres" class="statStyle"></div>
+<script type='text/javascript'>
+      google.charts.load('current', {'packages':['annotationchart']});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('date', 'Date');
+        data.addColumn('number', 'Влажность, %');
+        data.addRows([
+          [new Date(2022, 12-1, 1), 30],
+          [new Date(2022, 12-1, 2), 40],
+          [new Date(2022, 12-1, 3), 20],
+          [new Date(2022, 12-1, 4), 37],
+          [new Date(2022, 12-1, 5), 45],
+          [new Date(2022, 12-1, 6), 39],
+          [new Date(2022, 12-1, 7), 37]
+        ]);
+        var chart = new google.visualization.AnnotationChart(document.getElementById('chart_hum'));
+        var options = {
+          displayAnnotations: true
+        };
+        chart.draw(data, options);
+      }
+</script>
+<div id="chart_hum" class="statStyle"></div>
+</div>
+<script>designStat()</script>

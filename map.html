@@ -1,0 +1,143 @@
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="design.js"></script>
+
+<div id="housing" class="map_housing" style="border-radius: 40px"></div>
+
+<div id="map" class="mapStyle"></div>
+
+<script>
+	
+	function chooseBuild(){
+		var housing = "";
+		  
+		  var b = localStorage.getItem('build');
+		  switch(b) {
+			case "build1":
+				document.getElementById("housing").textContent = "Уфа, Корпуса №1-4, 7-11";
+				break;
+				
+			case "build5":
+				document.getElementById("housing").textContent = "Уфа, Корпуса №5-6";
+				break;
+				
+			case "build12":
+				document.getElementById("housing").textContent = "Уфа, Корпус №12";
+				break;
+					
+			case "build13":
+				document.getElementById("housing").textContent = "Уфа, Корпус №13";
+				break;
+					
+			case "build9":
+				document.getElementById("housing").textContent = "Уфа, Общежитие №9";
+				break;
+					
+			case "buildokt":
+				document.getElementById("housing").textContent = "Октябрьский, Корпуса №1-2";
+				break;
+					
+			case "buildstr":
+				document.getElementById("housing").textContent = "Стерлитамак, Корпус №1";
+				break;
+					
+			case "buildsal":
+				document.getElementById("housing").textContent = "Салават, корпус №1";
+			break;
+		  }
+	  }
+	  
+	  chooseBuild();
+	  
+      function initMap() {
+        var c = {lat: 54.774943, lng: 56.039254};
+        var build1 = {lat: 54.819767, lng: 56.063098};
+        var build5 = {lat: 54.724464, lng: 56.014890};
+        var build12 = {lat: 54.725769, lng: 55.970692};
+        var build13 = {lat: 54.716794, lng: 55.997175};
+        var build9 = {lat: 54.771918, lng: 56.014413};
+        var buildokt = {lat: 54.478828, lng: 53.454098};
+        var buildstr = {lat: 53.630563, lng: 55.923504};
+        var buildsal = {lat: 53.342092, lng: 55.949052};
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 11,
+          center: c
+        });
+        var marker1 = new google.maps.Marker({
+          position: build1,
+          map: map,
+		  label: { color: '#00aaff', fontWeight: 'bold', fontSize: '14px', text: 'Уфа, Корпуса №1-4, 7-11' }
+        });
+		marker1.addListener('click', function() {
+			localStorage.setItem('build', "build1");
+			chooseBuild();
+		});
+		var marker5 = new google.maps.Marker({
+          position: build5,
+          map: map,
+		  label: { color: '#00aaff', fontWeight: 'bold', fontSize: '14px', text: 'Уфа, Корпуса №5-6' }
+        });
+		marker5.addListener('click', function() {
+			localStorage.setItem('build', "build5");
+			chooseBuild();
+		});
+		var marker12 = new google.maps.Marker({
+          position: build12,
+          map: map,
+		  label: { color: '#00aaff', fontWeight: 'bold', fontSize: '14px', text: 'Уфа, Корпус №12' }
+        });
+		marker12.addListener('click', function() {
+			localStorage.setItem('build', "build12");
+			chooseBuild();
+		});
+		var marker13 = new google.maps.Marker({
+          position: build13,
+          map: map,
+		  label: { color: '#00aaff', fontWeight: 'bold', fontSize: '14px', text: 'Уфа, Корпус №13' }
+        });
+		marker13.addListener('click', function() {
+			localStorage.setItem('build', "build13");
+			chooseBuild();
+		});
+		var marker9 = new google.maps.Marker({
+          position: build9,
+          map: map,
+		  label: { color: '#00aaff', fontWeight: 'bold', fontSize: '14px', text: 'Уфа, Общежитие №9' }
+        });
+		marker9.addListener('click', function() {
+			localStorage.setItem('build', "build9");
+			chooseBuild();
+		});
+		var markerokt = new google.maps.Marker({
+          position: buildokt,
+          map: map,
+		  label: { color: '#00aaff', fontWeight: 'bold', fontSize: '14px', text: 'Октябрьский, Корпуса №1-2' }
+        });
+		markerokt.addListener('click', function() {
+			localStorage.setItem('build', "buildokt");
+			chooseBuild();
+		});
+		var markerstr = new google.maps.Marker({
+          position: buildstr,
+          map: map,
+		  label: { color: '#00aaff', fontWeight: 'bold', fontSize: '14px', text: 'Стерлитамак, Корпус №1' }
+        });
+		markerstr.addListener('click', function() {
+			localStorage.setItem('build', "buildstr");
+			chooseBuild();
+		});
+		var markersal = new google.maps.Marker({
+          position: buildsal,
+          map: map,
+		  label: { color: '#00aaff', fontWeight: 'bold', fontSize: '14px', text: 'Салават, корпус №1' }
+        });
+		markersal.addListener('click', function() {
+			localStorage.setItem('build', "buildsal");
+			chooseBuild();
+		});
+      }
+
+	designMap();
+</script>
+<script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&v=weekly"
+      defer></script>

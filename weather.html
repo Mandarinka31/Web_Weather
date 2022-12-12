@@ -1,0 +1,171 @@
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="main.js"></script>
+<script src="design.js"></script>
+<div align="center">
+<table width="90%" style="border-spacing: 15px">
+      <tr>
+		<td> <div id="weather" class="weather_text weather_text_weather">
+			</div>
+		</td>
+	    <th colspan="2"> <div id="housing" class="weather_housing" style="border-radius: 40px">
+        </div>
+		</th>
+      </tr>
+	  
+	  <tr>
+	  
+		<td align="center" width="30%">
+			  <img id="image" src="load.gif" width="100%" border="1px" style="box-shadow: -2px 4px 16px #8bc3f6; border-radius: 30px">
+		</td>
+		
+		
+		<td>
+			<table style="border-spacing: 0px 50px; margin-left: 20px; margin-right: 20px">
+				<tr>
+					<td id="temp" class="weather_temp" height="70%"></td>
+				</tr>
+				
+				<tr>
+					<td> <div id="temp_real" class="weather_text weather_text_real" height="30%">
+						</div>
+					</td>
+				</tr>
+			</table>
+		</td>
+		
+			
+		
+
+		<td> 
+			<table id="data_table" class="weather_in_table">
+				<tr>
+					<td id="pres" class="weather_text_table" ></td>
+				</tr>
+				
+				<tr>
+					<td id="hum" class="weather_text_table" ></td>
+				</tr>
+				
+				<tr>
+					<td id="wind" class="weather_text_table" ></td>
+				</tr>
+				
+				<tr>
+					<td id="uv" class="weather_text_table" ></td>
+				</tr>
+				
+				<tr>
+					<td id="fall" class="weather_text_table"></td>
+				</tr>
+			</table>
+		</td>
+	  </tr>
+		
+		
+</table>
+</div>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+  import { getDatabase, ref, onValue} from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
+  const firebaseConfig = {
+    apiKey: "AIzaSyD5cL3GT9-v1q5vieAD9GXxhfsSxb4gI6U",
+    authDomain: "meteo-80951.firebaseapp.com",
+    databaseURL: "https://meteo-80951-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "meteo-80951",
+    storageBucket: "meteo-80951.appspot.com",
+    messagingSenderId: "432785078592",
+    appId: "1:432785078592:web:f3be0a263f8f0c470222a5",
+    measurementId: "G-R2YTDWS40Z"
+  };
+  
+  var housing = "";
+  
+  var b = localStorage.getItem('build');
+	if (b==null) {
+		localStorage.setItem('build', "build1");
+		b = "build1";
+	}
+  switch(b) {
+			case "build1":
+				document.getElementById("housing").textContent = "Уфа, Корпуса №1-4, 7-11";
+				break;
+				
+			case "build5":
+				document.getElementById("housing").textContent = "Уфа, Корпуса №5-6";
+				break;
+				
+			case "build12":
+				document.getElementById("housing").textContent = "Уфа, Корпус №12";
+				break;
+					
+			case "build13":
+				document.getElementById("housing").textContent = "Уфа, Корпус №13";
+				break;
+					
+			case "build9":
+				document.getElementById("housing").textContent = "Уфа, Общежитие №9";
+				break;
+					
+			case "buildokt":
+				document.getElementById("housing").textContent = "Октябрьский, Корпуса №1-2";
+				break;
+					
+			case "buildstr":
+				document.getElementById("housing").textContent = "Стерлитамак, Корпус №1";
+				break;
+					
+			case "buildsal":
+				document.getElementById("housing").textContent = "Салават, корпус №1";
+			break;
+		  }
+  
+  
+  function getValueWeather(app, db, valueWeather) {
+	onValue(ref(db, 'Data/main/' + b + "/" + valueWeather), (snapshot) => {
+	  const data = snapshot.val();
+	  switch (valueWeather) {
+		case "temp":
+		  document.getElementById(valueWeather).textContent = data+"°C";
+		  break;
+		case "hum":
+		  document.getElementById(valueWeather).textContent = "Влажность "+data+"%";
+		  break;
+		case "pres":
+		  document.getElementById(valueWeather).textContent = "Давление "+data+" мм.рт.ст.";
+		  break;
+		case "fall":
+		  document.getElementById(valueWeather).textContent = "Вероятность дождя "+data+"%";
+		  break;
+		case "temp_real":
+		  document.getElementById(valueWeather).textContent = "Ощущается как "+data+"°C";
+		  break;
+		case "uv":
+		  document.getElementById(valueWeather).textContent = "Ультрафиолет "+data+" UV";
+		  break;
+		case "weather":
+		  document.getElementById(valueWeather).textContent = data;
+		  break;
+		case "wind_dir":
+		  localStorage.setItem('wind_dir', data);
+		  break;
+		case "wind_sp":
+		  localStorage.setItem('wind_sp', data);
+		  break;
+	  }
+	});
+	document.getElementById('wind').textContent = localStorage.getItem('wind_dir')+" "+localStorage.getItem('wind_sp')+" м/с";
+  }
+  
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase();
+  
+  const valuesWeather = ["temp", "hum", "pres", "fall", "temp_real", "uv", "weather", "wind_dir", "wind_sp"];
+  
+  valuesWeather.forEach(function(valueWeather) {
+		getValueWeather(app, db, valueWeather);
+  })
+  
+  designWeather();
+  
+  
+</script>

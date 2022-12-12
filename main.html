@@ -1,0 +1,48 @@
+<html>
+<head>
+<title>Погода в УГНТУ</title>
+<link rel="shortcut icon" href="usptu.png" type="usptu/png">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script src="design.js"></script>
+</head>
+<body id="mainbody">
+<div id="main">
+	<nav id="nav" v-bind:class="active" v-on:click.prevent>
+		<a href="#" class="weather" v-on:click="makeActive('weather')">Погода</a>
+		<a href="#" class="map" v-on:click="makeActive('map')">Карта</a>
+		<a href="#" class="building" v-on:click="makeActive('building')">Список корпусов</a>
+		<a href="#" class="history" v-on:click="makeActive('history')">История</a>
+		<a href="#" class="stat" v-on:click="makeActive('stat')">Статистика</a>
+	</nav>
+</div>
+<object id="cont" type="text/html" data="weather.html"></object>
+<script>
+designMain();
+/*let block = document.querySelectorAll( ".weather");
+block.backgroundColor = "black";
+nav.weather .weather,
+nav.map .map,
+nav.building .building,
+nav.history .history,
+nav.stat .stat{
+	background-color:#007cad;
+	opacity: .3;
+}*/
+var demo = new Vue({
+	el: '#main',
+	data: {
+		active: 'weather'
+	},
+	methods: {
+		makeActive: function(item){
+			this.active = item;
+			document.getElementById("cont").data = item+".html";
+		}
+	}
+});
+
+
+</script>
+</body>
+</html>
